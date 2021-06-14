@@ -15,6 +15,7 @@ server.use(express.json());
 server.use("/profile", profileRouter);
 server.use("/experience", experienceRouter);
 server.use("/posts", postsRouter);
+
 db.sync({ alter: true })
   .then(() => {
     server.listen(port, () => {

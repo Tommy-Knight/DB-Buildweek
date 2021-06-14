@@ -2,6 +2,9 @@
 import express from "express";
 import createError from "http-errors";
 import { profile } from "../../db/db.js";
+import multer from "multer"
+import { v2 as cloudinary } from "cloudinary"
+import { CloudinaryStorage } from "multer-storage-cloudinary"
 // import ReviewModel from "./schema.js"
 // import ProductModel from "../products/schema.js"
 // import q2m from "query-to-mongo"
@@ -72,4 +75,32 @@ profileRouter
       );
     }
   });
+
+  const cloudinaryStorage = new CloudinaryStorage({
+		cloudinary,
+		params: { folder: "db-buildweek" },
+	})
+
+	const upload = multer({
+		storage: cloudinaryStorage,
+	}).single("image")
+
+	profileRouter.post("/:id/upload", upload, async (req, res, next) => {
+		try {
+			const data = await profile.update(
+				{ imageUrl: req.file.path },
+				{
+					where: { _id: req.params.id },
+					returning: true,
+				}
+			)
+
+			if (data[0] === 1) res.send(data[1][0])
+			else res.status(404).send("ID not found")
+		} catch (error) {
+			next(error.message)
+		}
+	})
+
+
 export default profileRouter;
