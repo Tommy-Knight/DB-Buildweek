@@ -57,7 +57,7 @@ const experience = sequelize.define("experience", {
     allowNull: false,
   },
   image: {
-    type: DataTypes.BLOB,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
 });
@@ -96,7 +96,7 @@ const profile = sequelize.define("profile", {
     allowNull: false,
   },
   image: {
-    type: DataTypes.BLOB,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
 });
@@ -111,7 +111,7 @@ const posts = sequelize.define("posts", {
     allowNull: false,
   },
   image: {
-    type: DataTypes.BLOB,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
 });
@@ -122,25 +122,25 @@ const posts = sequelize.define("posts", {
 //     primaryKey: true,
 //   },
 // });
-const user = sequelize.define("user", {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
-  name: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  surname: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-});
+// const user = sequelize.define("user", {
+//   id: {
+//     type: DataTypes.INTEGER,
+//     autoIncrement: true,
+//     primaryKey: true,
+//   },
+//   name: {
+//     type: DataTypes.TEXT,
+//     allowNull: false,
+//   },
+//   surname: {
+//     type: DataTypes.TEXT,
+//     allowNull: false,
+//   },
+//   email: {
+//     type: DataTypes.TEXT,
+//     allowNull: false,
+//   },
+// });
 profile.hasMany(posts);
 posts.belongsTo(profile);
 
