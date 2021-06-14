@@ -2,6 +2,11 @@
 import express from "express";
 import createError from "http-errors";
 import { profile } from "../../db/db.js";
+import { promisify } from "util";
+import fs from "fs-extra";
+import { join } from "path";
+import { pipeline } from "stream";
+import PdfPrinter from "pdfmake";
 // import ReviewModel from "./schema.js"
 // import ProductModel from "../products/schema.js"
 // import q2m from "query-to-mongo"
@@ -31,7 +36,45 @@ profileRouter
       );
     }
   });
+profileRouter.route("/:id/CV").get(async (req, res, next) => {
+  try {
+    const data = await profile.findAll({ where: { id: req.params.id } });
+    const asyncPipeLine = promisify(pipeline);
+    const generatePDFStream = async (data) => {
+      const fonts = {
+        Roboto: {
+          normal: "Helvetica",
+          bold: "Helvetica-Bold",
+          italics: "Helvetica-Oblique",
+          bolditalics: "Helvetica-BoldOblique",
+        },
+      };
 
+      const printer = new PdfPrinter(fonts);
+
+      const docDefinition = {
+        content: [data],
+      };
+
+      const options = {
+        // ...
+      };
+
+      const pdfReadableStream = printer.createPdfKitDocument(
+        docDefinition,
+        options
+      );
+      pdfReadableStream.end();
+      const path = join(data, "mypdf.pdf");
+      const destination = fs.createWriteStream(path);
+      await asyncPipeLine(pdfReadableStream, destination);
+    };
+    res.send(generatePDFStream);
+  } catch (error) {
+    console.log(error);
+    next(createError(500, "Oops something went wrong, please try again later"));
+  }
+});
 profileRouter
   .route("/:id")
   .get(async (req, res, next) => {
