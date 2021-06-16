@@ -1,7 +1,7 @@
 //profile routes
 import express from "express"
 import createError from "http-errors"
-import { profile } from "../../db/db.js"
+import { profile, user } from "../../db/db.js"
 import { promisify } from "util"
 import fs from "fs-extra"
 import { join } from "path"
@@ -17,7 +17,7 @@ profileRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
-      const data = await profile.findAll()
+      const data = await profile.findAll({ include: user })
       res.send(data)
     } catch (e) {
       console.log(e)

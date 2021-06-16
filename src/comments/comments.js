@@ -1,17 +1,16 @@
-//posts routes
 import express from "express"
 import createError from "http-errors"
-import { comments, likes, posts, user } from "../../db/db.js"
+import { comments } from "../db/db.js"
 // import ReviewModel from "./schema.js"
 // import ProductModel from "../products/schema.js"
 // import q2m from "query-to-mongo"
 
-const postsRouter = express.Router()
-postsRouter
+const commentsRouter = express.Router()
+commentsRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
-      const data = await posts.findAll({ include: [comments, likes, user] })
+      const data = await comments.findAll()
       res.send(data)
     } catch (e) {
       console.log(e)
@@ -22,7 +21,7 @@ postsRouter
   })
   .post(async (req, res, next) => {
     try {
-      const data = await posts.create(req.body)
+      const data = await comments.create(req.body)
       res.send(data)
     } catch (e) {
       console.log(e)
@@ -32,11 +31,11 @@ postsRouter
     }
   })
 
-postsRouter
+commentsRouter
   .route("/:id")
   .get(async (req, res, next) => {
     try {
-      const data = await posts.findByPk(req.params.id)
+      const data = await comments.findByPk(req.params.id)
       res.send(data)
     } catch (e) {
       console.log(e)
@@ -47,11 +46,11 @@ postsRouter
   })
   .put(async (req, res, next) => {
     try {
-      const postss = await posts.update(req.body, {
+      const commentss = await comments.update(req.body, {
         returning: true,
         where: { id: req.params.id },
       })
-      res.send(postss)
+      res.send(commentss)
     } catch (e) {
       console.log(e)
       next(
@@ -61,7 +60,7 @@ postsRouter
   })
   .delete(async (req, res, next) => {
     try {
-      const postss = await posts.destroy({
+      const commentss = await comments.destroy({
         where: { id: req.params.id },
       })
       res.send("Deleted successfully")
@@ -72,4 +71,4 @@ postsRouter
       )
     }
   })
-export default postsRouter
+export default commentsRouter

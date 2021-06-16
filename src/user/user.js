@@ -1,17 +1,17 @@
-//posts routes
 import express from "express"
 import createError from "http-errors"
-import { comments, likes, posts, user } from "../../db/db.js"
+import { user, comments, likes } from "../db/db.js"
+
 // import ReviewModel from "./schema.js"
 // import ProductModel from "../products/schema.js"
 // import q2m from "query-to-mongo"
 
-const postsRouter = express.Router()
-postsRouter
+const userRouter = express.Router()
+userRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
-      const data = await posts.findAll({ include: [comments, likes, user] })
+      const data = await user.findAll({ include: [comments, likes] })
       res.send(data)
     } catch (e) {
       console.log(e)
@@ -22,7 +22,7 @@ postsRouter
   })
   .post(async (req, res, next) => {
     try {
-      const data = await posts.create(req.body)
+      const data = await user.create(req.body)
       res.send(data)
     } catch (e) {
       console.log(e)
@@ -32,11 +32,11 @@ postsRouter
     }
   })
 
-postsRouter
+userRouter
   .route("/:id")
   .get(async (req, res, next) => {
     try {
-      const data = await posts.findByPk(req.params.id)
+      const data = await user.findByPk(req.params.id)
       res.send(data)
     } catch (e) {
       console.log(e)
@@ -47,11 +47,11 @@ postsRouter
   })
   .put(async (req, res, next) => {
     try {
-      const postss = await posts.update(req.body, {
+      const users = await user.update(req.body, {
         returning: true,
         where: { id: req.params.id },
       })
-      res.send(postss)
+      res.send(users)
     } catch (e) {
       console.log(e)
       next(
@@ -61,7 +61,7 @@ postsRouter
   })
   .delete(async (req, res, next) => {
     try {
-      const postss = await posts.destroy({
+      const users = await user.destroy({
         where: { id: req.params.id },
       })
       res.send("Deleted successfully")
@@ -72,4 +72,4 @@ postsRouter
       )
     }
   })
-export default postsRouter
+export default userRouter
