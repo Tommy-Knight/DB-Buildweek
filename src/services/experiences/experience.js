@@ -2,7 +2,7 @@
 import express from "express"
 import createError from "http-errors"
 import json2csv from "json2csv"
-import { experience, user } from "../../db/db.js"
+import { experience, profile } from "../../db/db.js"
 const Json2CsvParser = json2csv.Parser
 
 // import ReviewModel from "./schema.js"
@@ -14,7 +14,7 @@ experienceRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
-      const data = await experience.findAll({ include: user })
+      const data = await experience.findAll({ include: profile })
       res.send(data)
     } catch (e) {
       console.log(e)

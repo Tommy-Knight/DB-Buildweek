@@ -181,8 +181,11 @@ likes.belongsTo(user)
 posts.hasMany(likes)
 likes.belongsTo(posts)
 
-user.hasMany(experience)
-experience.belongsTo(user)
+// user.hasMany(experience)
+// experience.belongsTo(user)
+
+profile.hasMany(experience)
+experience.belongsTo(profile)
 
 export { posts, profile, experience, user, comments, likes }
 export default sequelize

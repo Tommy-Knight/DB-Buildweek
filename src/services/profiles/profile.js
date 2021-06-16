@@ -1,7 +1,7 @@
 //profile routes
 import express from "express"
 import createError from "http-errors"
-import { profile, user } from "../../db/db.js"
+import { profile, user, experience } from "../../db/db.js"
 import { promisify } from "util"
 import fs from "fs-extra"
 import { join } from "path"
@@ -17,7 +17,7 @@ profileRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
-      const data = await profile.findAll({ include: user })
+      const data = await profile.findAll({ include: [user, experience] })
       res.send(data)
     } catch (e) {
       console.log(e)
@@ -78,6 +78,13 @@ profileRouter
 // });
 
 // DOWNLOAD AS PDF FROM ID
+// profileRouter.get("/:id/experience",async(req,res,next)=>{
+//   try {
+//     const data
+//   } catch (error) {
+//     next(createError(500, error))
+//   }
+// })
 profileRouter.get("/:id/CV", async (req, res, next) => {
   try {
     // if (!isValidObjectId(req.params.id))
@@ -96,11 +103,24 @@ profileRouter.get("/:id/CV", async (req, res, next) => {
   }
 })
 
+profileRouter.route("/:id/experience").get(async (req, res, next) => {
+  try {
+    const data = await experience.findOne({
+      where: { profileId: req.params.id },
+    })
+    res.send(data)
+  } catch (error) {
+    console.log(error)
+    next(createError(500, "Oops something went wrong, please try again later"))
+  }
+})
 profileRouter
   .route("/:id")
   .get(async (req, res, next) => {
     try {
-      const data = await profile.findByPk(req.params.id)
+      const data = await profile.findByPk(req.params.id, {
+        include: experience,
+      })
       res.send(data)
     } catch (e) {
       console.log(e)
