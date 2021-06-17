@@ -6,14 +6,22 @@ import multer from "multer"
 import { v2 as cloudinary } from "cloudinary"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
 import { comments } from "../db/db.js"
+// import ReviewModel from "./schema.js"
+// import ProductModel from "../products/schema.js"
+// import q2m from "query-to-mongo"
 
 const commentsRouter = express.Router()
 commentsRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
+<<<<<<< HEAD:src/services/profiles/profiles.js
       const data = await profile.findAll({include: user});
       res.send(data);
+=======
+      const data = await comments.findAll()
+      res.send(data)
+>>>>>>> main:src/comments/comments.js
     } catch (e) {
       console.log(e)
       next(

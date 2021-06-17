@@ -1,21 +1,21 @@
 //create pool here
-import s from "sequelize";
-const { Sequelize, DataTypes } = s;
+import s from "sequelize"
+const { Sequelize, DataTypes } = s
 
-const { PGUSER, PGPORT, PGDATABASE, PGPASSWORD } = process.env;
+const { PGUSER, PGPORT, PGDATABASE, PGPASSWORD } = process.env
 
 const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
   port: PGPORT,
   host: "localhost",
   dialect: "postgres",
-});
+})
 
 sequelize
   .authenticate()
   .then(() => {
-    console.log("connected");
+    console.log("connected")
   })
-  .catch((e) => console.log(e));
+  .catch((e) => console.log(e))
 
 const experience = sequelize.define("experience", {
   id: {
@@ -55,7 +55,7 @@ const experience = sequelize.define("experience", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-});
+})
 const profile = sequelize.define("profile", {
   id: {
     type: DataTypes.INTEGER,
@@ -129,14 +129,78 @@ const user = sequelize.define("user", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-});
+})
+// const shoppingCart = sequelize.define("cart", {
+//   id: {
+//     type: DataTypes.INTEGER,
+//     autoIncrement: true,
+//     primaryKey: true,
+//   },
+// });
+const user = sequelize.define("user", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  name: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  surname: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  imageUrl: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+})
+const comments = sequelize.define("comments", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  comment: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+})
+const likes = sequelize.define("likes", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+})
+user.hasMany(posts)
+posts.belongsTo(user)
 
-user.hasMany(profile);
+user.hasMany(profile)
 profile.belongsTo(user)
-posts.belongsTo(profile);
-profile.hasMany(posts);
-experience.belongsTo(profile);
-profile.hasMany(experience);
 
-export { posts, profile, experience, user };
-export default sequelize;
+posts.hasMany(comments)
+comments.belongsTo(posts)
+
+user.hasMany(comments)
+comments.belongsTo(user)
+
+user.hasMany(likes)
+likes.belongsTo(user)
+
+posts.hasMany(likes)
+likes.belongsTo(posts)
+
+// user.hasMany(experience)
+// experience.belongsTo(user)
+
+profile.hasMany(experience)
+experience.belongsTo(profile)
+
+export { posts, profile, experience, user, comments, likes }
+export default sequelize
