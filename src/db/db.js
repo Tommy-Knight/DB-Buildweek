@@ -18,11 +18,6 @@ sequelize
   .catch((e) => console.log(e));
 
 const experience = sequelize.define("experience", {
-  // name: { type: String, required: true },
-  // description: { type: String, required: true },
-  // brand: { type: String, required: true },
-  // imageUrl: { type: String },
-  // price: { type: Number, required: true },
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -99,7 +94,8 @@ const profile = sequelize.define("profile", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-});
+})
+
 const posts = sequelize.define("posts", {
   id: {
     type: DataTypes.INTEGER,
@@ -112,40 +108,35 @@ const posts = sequelize.define("posts", {
   },
   image: {
     type: DataTypes.TEXT,
+    allowNull: true,
+  },
+});
+const user = sequelize.define("user", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  name: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  surname: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.TEXT,
     allowNull: false,
   },
 });
-// const shoppingCart = sequelize.define("cart", {
-//   id: {
-//     type: DataTypes.INTEGER,
-//     autoIncrement: true,
-//     primaryKey: true,
-//   },
-// });
-// const user = sequelize.define("user", {
-//   id: {
-//     type: DataTypes.INTEGER,
-//     autoIncrement: true,
-//     primaryKey: true,
-//   },
-//   name: {
-//     type: DataTypes.TEXT,
-//     allowNull: false,
-//   },
-//   surname: {
-//     type: DataTypes.TEXT,
-//     allowNull: false,
-//   },
-//   email: {
-//     type: DataTypes.TEXT,
-//     allowNull: false,
-//   },
-// });
-profile.hasMany(posts);
+
+user.hasMany(profile);
+profile.belongsTo(user)
 posts.belongsTo(profile);
-
-profile.hasMany(experience);
+profile.hasMany(posts);
 experience.belongsTo(profile);
+profile.hasMany(experience);
 
-export { posts, profile, experience };
+export { posts, profile, experience, user };
 export default sequelize;

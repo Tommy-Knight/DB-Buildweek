@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
 import db from "./db/db.js";
+import userRouter from "./services/users/users.js"
 import experienceRouter from "./services/experiences/experience.js";
-import profileRouter from "./services/profiles/user.js";
+import profileRouter from "./services/profiles/profiles.js";
 import postsRouter from "./services/posts/posts.js";
 import listEndpoints from "express-list-endpoints";
 
@@ -12,6 +13,7 @@ const port = 5000;
 server.use(cors());
 server.use(express.json());
 
+server.use("/user", userRouter)
 server.use("/profile", profileRouter);
 server.use("/experience", experienceRouter);
 server.use("/posts", postsRouter);
