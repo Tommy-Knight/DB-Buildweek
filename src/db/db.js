@@ -1,21 +1,21 @@
 //create pool here
-import s from "sequelize";
-const { Sequelize, DataTypes } = s;
+import s from "sequelize"
+const { Sequelize, DataTypes } = s
 
-const { PGUSER, PGPORT, PGDATABASE, PGPASSWORD } = process.env;
+const { PGUSER, PGPORT, PGDATABASE, PGPASSWORD } = process.env
 
 const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
   port: PGPORT,
   host: "localhost",
   dialect: "postgres",
-});
+})
 
 sequelize
   .authenticate()
   .then(() => {
-    console.log("connected");
+    console.log("connected")
   })
-  .catch((e) => console.log(e));
+  .catch((e) => console.log(e))
 
 const experience = sequelize.define("experience", {
   // name: { type: String, required: true },
@@ -60,7 +60,7 @@ const experience = sequelize.define("experience", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-});
+})
 const profile = sequelize.define("profile", {
   id: {
     type: DataTypes.INTEGER,
@@ -99,7 +99,7 @@ const profile = sequelize.define("profile", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-});
+})
 const posts = sequelize.define("posts", {
   id: {
     type: DataTypes.INTEGER,
@@ -114,7 +114,7 @@ const posts = sequelize.define("posts", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-});
+})
 // const shoppingCart = sequelize.define("cart", {
 //   id: {
 //     type: DataTypes.INTEGER,
@@ -122,30 +122,70 @@ const posts = sequelize.define("posts", {
 //     primaryKey: true,
 //   },
 // });
-// const user = sequelize.define("user", {
-//   id: {
-//     type: DataTypes.INTEGER,
-//     autoIncrement: true,
-//     primaryKey: true,
-//   },
-//   name: {
-//     type: DataTypes.TEXT,
-//     allowNull: false,
-//   },
-//   surname: {
-//     type: DataTypes.TEXT,
-//     allowNull: false,
-//   },
-//   email: {
-//     type: DataTypes.TEXT,
-//     allowNull: false,
-//   },
-// });
-profile.hasMany(posts);
-posts.belongsTo(profile);
+const user = sequelize.define("user", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  name: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  surname: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  imageUrl: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+})
+const comments = sequelize.define("comments", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  comment: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+})
+const likes = sequelize.define("likes", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+})
+user.hasMany(posts)
+posts.belongsTo(user)
 
-profile.hasMany(experience);
-experience.belongsTo(profile);
+user.hasMany(profile)
+profile.belongsTo(user)
 
-export { posts, profile, experience };
-export default sequelize;
+posts.hasMany(comments)
+comments.belongsTo(posts)
+
+user.hasMany(comments)
+comments.belongsTo(user)
+
+user.hasMany(likes)
+likes.belongsTo(user)
+
+posts.hasMany(likes)
+likes.belongsTo(posts)
+
+// user.hasMany(experience)
+// experience.belongsTo(user)
+
+profile.hasMany(experience)
+experience.belongsTo(profile)
+
+export { posts, profile, experience, user, comments, likes }
+export default sequelize
