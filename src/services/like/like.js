@@ -1,6 +1,6 @@
 import express from "express"
 import createError from "http-errors"
-import { likes } from "../db/db.js"
+import { likes } from "../../db/db.js"
 // import ReviewModel from "./schema.js"
 // import ProductModel from "../products/schema.js"
 // import q2m from "query-to-mongo"

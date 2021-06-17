@@ -103,17 +103,36 @@ profileRouter.get("/:id/CV", async (req, res, next) => {
   }
 })
 
-profileRouter.route("/:id/experience").get(async (req, res, next) => {
-  try {
-    const data = await experience.findOne({
-      where: { profileId: req.params.id },
-    })
-    res.send(data)
-  } catch (error) {
-    console.log(error)
-    next(createError(500, "Oops something went wrong, please try again later"))
-  }
-})
+profileRouter
+  .route("/:id/experience")
+  .get(async (req, res, next) => {
+    try {
+      const data = await experience.findOne({
+        where: { profileId: req.params.id },
+      })
+      res.send(data)
+    } catch (error) {
+      console.log(error)
+      next(
+        createError(500, "Oops something went wrong, please try again later")
+      )
+    }
+  })
+  .post(async (req, res, next) => {
+    try {
+      if (experience.findOne({ where: { profileId: req.params.id } })) {
+        const data = await experience.create(req.body)
+        res.send(data)
+      } else {
+        next(createError(404, "id isnot found"))
+      }
+    } catch (error) {
+      console.log(error)
+      next(
+        createError(500, "Oops something went wrong, please try again later")
+      )
+    }
+  })
 profileRouter
   .route("/:id")
   .get(async (req, res, next) => {
