@@ -7,7 +7,11 @@ import fs from "fs-extra"
 import { join } from "path"
 import { pipeline } from "stream"
 import PdfPrinter from "pdfmake"
-import generatePDFStream from "../../helper/pdfout.js"
+import generatePDFStream from "../helper/pdfout.js"
+import multer from "multer"
+import { v2 as cloudinary } from "cloudinary"
+import { CloudinaryStorage } from "multer-storage-cloudinary"
+
 // import ReviewModel from "./schema.js"
 // import ProductModel from "../products/schema.js"
 // import q2m from "query-to-mongo"
@@ -157,3 +161,4 @@ profileRouter
     }
   })
 export default profileRouter
+

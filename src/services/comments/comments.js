@@ -5,23 +5,15 @@ import { profile, user } from "../../db/db.js";
 import multer from "multer"
 import { v2 as cloudinary } from "cloudinary"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
-import { comments } from "../db/db.js"
-// import ReviewModel from "./schema.js"
-// import ProductModel from "../products/schema.js"
-// import q2m from "query-to-mongo"
+import { comments } from "../../db/db.js"
 
 const commentsRouter = express.Router()
 commentsRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
-<<<<<<< HEAD:src/services/profiles/profiles.js
       const data = await profile.findAll({include: user});
       res.send(data);
-=======
-      const data = await comments.findAll()
-      res.send(data)
->>>>>>> main:src/comments/comments.js
     } catch (e) {
       console.log(e)
       next(
@@ -29,6 +21,7 @@ commentsRouter
       )
     }
   })
+  
   .post(async (req, res, next) => {
     try {
       const data = await comments.create(req.body)
@@ -56,7 +49,7 @@ commentsRouter
   })
   .put(async (req, res, next) => {
     try {
-      const commentss = await comments.update(req.body, {
+      const comments = await comments.update(req.body, {
         returning: true,
         where: { id: req.params.id },
       })
@@ -70,7 +63,7 @@ commentsRouter
   })
   .delete(async (req, res, next) => {
     try {
-      const commentss = await comments.destroy({
+      const comments = await comments.destroy({
         where: { id: req.params.id },
       })
       res.send("Deleted successfully")
@@ -91,9 +84,9 @@ commentsRouter
 		storage: cloudinaryStorage,
 	}).single("image")
 
-	profileRouter.post("/:id/upload", upload, async (req, res, next) => {
+	commentsRouter.post("/:id/upload", upload, async (req, res, next) => {
 		try {
-			const data = await profile.update(
+			const data = await comments.update(
 				{ imageUrl: req.file.path },
 				{
 					where: { _id: req.params.id },
@@ -108,6 +101,4 @@ commentsRouter
 		}
 	})
 
-
-export default profileRouter;
 export default commentsRouter

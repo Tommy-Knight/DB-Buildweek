@@ -5,10 +5,6 @@ import json2csv from "json2csv"
 import { experience, profile } from "../../db/db.js"
 const Json2CsvParser = json2csv.Parser
 
-// import ReviewModel from "./schema.js"
-// import ProductModel from "../products/schema.js"
-// import q2m from "query-to-mongo"
-
 const experienceRouter = express.Router()
 
 experienceRouter.route("/:userId/profile").get(async (req, res, next) => {
@@ -47,6 +43,7 @@ experienceRouter
       )
     }
   })
+
 experienceRouter
   .route("/:username/experiences/csv")
   .post(async (req, res, next) => {
@@ -83,6 +80,7 @@ experienceRouter
       )
     }
   })
+
 experienceRouter
   .route("/:id")
   .get(async (req, res, next) => {
@@ -123,4 +121,5 @@ experienceRouter
       )
     }
   })
+  
 export default experienceRouter

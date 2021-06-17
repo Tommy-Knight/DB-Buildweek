@@ -130,36 +130,29 @@ const user = sequelize.define("user", {
     allowNull: false,
   },
 })
-// const shoppingCart = sequelize.define("cart", {
+// const user = sequelize.define("user", {
 //   id: {
 //     type: DataTypes.INTEGER,
 //     autoIncrement: true,
 //     primaryKey: true,
 //   },
-// });
-const user = sequelize.define("user", {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
-  name: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  surname: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  imageUrl: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-})
+//   name: {
+//     type: DataTypes.TEXT,
+//     allowNull: false,
+//   },
+//   surname: {
+//     type: DataTypes.TEXT,
+//     allowNull: false,
+//   },
+//   email: {
+//     type: DataTypes.TEXT,
+//     allowNull: false,
+//   },
+//   imageUrl: {
+//     type: DataTypes.TEXT,
+//     allowNull: false,
+//   },
+// })
 const comments = sequelize.define("comments", {
   id: {
     type: DataTypes.INTEGER,
@@ -204,3 +197,6 @@ experience.belongsTo(profile)
 
 export { posts, profile, experience, user, comments, likes }
 export default sequelize
+
+
+
