@@ -1,13 +1,9 @@
-//profile routes
 import express from "express"
 import createError from "http-errors"
 import { user } from "../../db/db.js"
 import multer from "multer"
 import { v2 as cloudinary } from "cloudinary"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
-// import ReviewModel from "./schema.js"
-// import ProductModel from "../products/schema.js"
-// import q2m from "query-to-mongo"
 
 const userRouter = express.Router()
 userRouter
