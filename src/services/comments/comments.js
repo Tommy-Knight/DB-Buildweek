@@ -1,7 +1,7 @@
 //profile routes
 import express from "express";
 import createError from "http-errors";
-import { profile, user } from "../../db/db.js";
+import { posts, profile, user } from "../../db/db.js";
 import multer from "multer"
 import { v2 as cloudinary } from "cloudinary"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
@@ -12,7 +12,10 @@ commentsRouter
   .route("/")
   .get(async (req, res, next) => {
     try {
-      const data = await profile.findAll({include: user});
+      const data = await comments.findAll({
+				include: { model: posts, include: { model: comments, include: {model : user, includer: {model : profile}} } },
+				order: [["id", "ASC"]],
+			})
       res.send(data);
     } catch (e) {
       console.log(e)
@@ -53,7 +56,7 @@ commentsRouter
         returning: true,
         where: { id: req.params.id },
       })
-      res.send(commentss)
+      res.send(comments)
     } catch (e) {
       console.log(e)
       next(
@@ -63,7 +66,7 @@ commentsRouter
   })
   .delete(async (req, res, next) => {
     try {
-      const comments = await comments.destroy({
+      const comment = await comments.destroy({
         where: { id: req.params.id },
       })
       res.send("Deleted successfully")

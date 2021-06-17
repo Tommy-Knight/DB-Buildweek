@@ -111,6 +111,25 @@ const posts = sequelize.define("posts", {
     allowNull: true,
   },
 });
+// const user = sequelize.define("user", {
+//   id: {
+//     type: DataTypes.INTEGER,
+//     autoIncrement: true,
+//     primaryKey: true,
+//   },
+//   name: {
+//     type: DataTypes.TEXT,
+//     allowNull: false,
+//   },
+//   surname: {
+//     type: DataTypes.TEXT,
+//     allowNull: false,
+//   },
+//   email: {
+//     type: DataTypes.TEXT,
+//     allowNull: false,
+//   },
+// })
 const user = sequelize.define("user", {
   id: {
     type: DataTypes.INTEGER,
@@ -130,29 +149,6 @@ const user = sequelize.define("user", {
     allowNull: false,
   },
 })
-// const user = sequelize.define("user", {
-//   id: {
-//     type: DataTypes.INTEGER,
-//     autoIncrement: true,
-//     primaryKey: true,
-//   },
-//   name: {
-//     type: DataTypes.TEXT,
-//     allowNull: false,
-//   },
-//   surname: {
-//     type: DataTypes.TEXT,
-//     allowNull: false,
-//   },
-//   email: {
-//     type: DataTypes.TEXT,
-//     allowNull: false,
-//   },
-//   imageUrl: {
-//     type: DataTypes.TEXT,
-//     allowNull: false,
-//   },
-// })
 const comments = sequelize.define("comments", {
   id: {
     type: DataTypes.INTEGER,
@@ -171,6 +167,8 @@ const likes = sequelize.define("likes", {
     primaryKey: true,
   },
 })
+
+
 user.hasMany(posts)
 posts.belongsTo(user)
 
@@ -197,6 +195,5 @@ experience.belongsTo(profile)
 
 export { posts, profile, experience, user, comments, likes }
 export default sequelize
-
 
 

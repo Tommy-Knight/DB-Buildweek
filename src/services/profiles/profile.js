@@ -151,11 +151,11 @@ profileRouter
   })
   .put(async (req, res, next) => {
     try {
-      const profiles = await profile.update(req.body, {
+      const profile = await profile.update(req.body, {
         returning: true,
         where: { id: req.params.id },
       })
-      res.send(profiles)
+      res.send(profile)
     } catch (e) {
       console.log(e)
       next(
@@ -165,7 +165,7 @@ profileRouter
   })
   .delete(async (req, res, next) => {
     try {
-      const profiles = await profile.destroy({
+      const profile = await profile.destroy({
         where: { id: req.params.id },
       })
       res.send("Deleted successfully")

@@ -1,6 +1,9 @@
 import express from "express"
 import createError from "http-errors"
-import { user, comments, likes, experience } from "../db/db.js"
+import multer from "multer"
+import { v2 as cloudinary } from "cloudinary"
+import { CloudinaryStorage } from "multer-storage-cloudinary"
+import { user, comments, likes, profile } from "../../db/db.js"
 
 const userRouter = express.Router()
 userRouter
@@ -8,13 +11,13 @@ userRouter
   .get(async (req, res, next) => {
     try {
       const data = await user.findAll({
-        include: [comments, likes, experience],
+        include: [comments, likes, profile],
       })
       res.send(data)
     } catch (e) {
       console.log(e)
       next(
-        createError(500, "Oops something went wrong, please try again later")
+        createError(500, "Oops something went wrong, please try again later sdfsdfsd")
       )
     }
   })
@@ -34,7 +37,9 @@ userRouter
   .route("/:id")
   .get(async (req, res, next) => {
     try {
-      const data = await user.findByPk(req.params.id)
+      const data = await user.findByPk(req.params.id, {
+        include: [comments, likes, profile],
+      })
       res.send(data)
     } catch (e) {
       console.log(e)
@@ -70,4 +75,29 @@ userRouter
       )
     }
   })
+  const cloudinaryStorage = new CloudinaryStorage({
+		cloudinary,
+		params: { folder: "db-buildweek" },
+	})
+
+	const upload = multer({
+		storage: cloudinaryStorage,
+	}).single("image")
+
+	userRouter.post("/:id/upload", upload, async (req, res, next) => {
+		try {
+			const data = await user.update(
+				{ imageUrl: req.file.path },
+				{
+					where: { _id: req.params.id },
+					returning: true,
+				}
+			)
+
+			if (data[0] === 1) res.send(data[1][0])
+			else res.status(404).send("ID not found")
+		} catch (error) {
+			next(error.message)
+		}
+	})
 export default userRouter
