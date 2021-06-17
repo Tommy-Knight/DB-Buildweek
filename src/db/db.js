@@ -49,11 +49,11 @@ const experience = sequelize.define("experience", {
   },
   username: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
   },
   image: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
   },
 })
 const profile = sequelize.define("profile", {
