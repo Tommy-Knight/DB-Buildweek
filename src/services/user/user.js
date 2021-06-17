@@ -1,6 +1,6 @@
 import express from "express"
 import createError from "http-errors"
-import { user, comments, likes, experience } from "../db/db.js"
+import { user, comments, likes, experience } from "../../db/db.js"
 
 // import ReviewModel from "./schema.js"
 // import ProductModel from "../products/schema.js"

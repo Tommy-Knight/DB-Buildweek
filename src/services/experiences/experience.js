@@ -35,10 +35,10 @@ experienceRouter
     }
   })
 experienceRouter
-  .route("/:username/experiences/csv")
+  .route("/:userId/experiences/csv")
   .post(async (req, res, next) => {
     try {
-      const data = await experience.findAll({ username: req.params.username })
+      const data = await experience.findAll({ userId: req.params.userId })
       // console.log(username);
       console.log(data)
       const jsonData = JSON.parse(JSON.stringify(data))
