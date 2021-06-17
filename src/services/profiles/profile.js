@@ -38,55 +38,23 @@ profileRouter
       )
     }
   })
-// profileRouter.route("/:id/CV").get(async (req, res, next) => {
-//   try {
-//     const data = await profile.findAll({ where: { id: req.params.id } });
-//     const asyncPipeLine = promisify(pipeline);
-//     const generatePDFStream = async (data) => {
-//       // const fonts = {
-//         Roboto: {
-//           normal: "Helvetica",
-//           bold: "Helvetica-Bold",
-//           italics: "Helvetica-Oblique",
-//           bolditalics: "Helvetica-BoldOblique",
-//         },
-//       };
-
-//       const printer = new PdfPrinter(fonts);
-
-//       const docDefinition = {
-//         content: [data],
-//       };
-
-//       const options = {
-//         // ...
-//       };
-
-//       const pdfReadableStream = printer.createPdfKitDocument(
-//         docDefinition,
-//         options
-//       );
-//       pdfReadableStream.end();
-//       const path = join(data, "mypdf.pdf");
-//       const destination = fs.createWriteStream(path);
-//       await asyncPipeLine(pdfReadableStream, destination);
-//     };
-//     res.send(generatePDFStream);
-//   } catch (error) {
-//     console.log(error);
-//     next(createError(500, "Oops something went wrong, please try again later"));
-//   }
-// });
-
-// DOWNLOAD AS PDF FROM ID
-// profileRouter.get("/:id/experience",async(req,res,next)=>{
-//   try {
-//     const data
-//   } catch (error) {
-//     next(createError(500, error))
-//   }
-// })
-profileRouter.get("/:id/CV", async (req, res, next) => {
+profileRouter.post(
+  "/:id/experience/:expId/picture",
+  multer().single("authorAvatar"),
+  async (req, res, next) => {
+    try {
+      if (experience.findOne({ where: { profileId: req.params.id } })) {
+        const data = await profile.cre
+      }
+    } catch (error) {
+      console.log(e)
+      next(
+        createError(500, "Oops something went wrong, please try again later")
+      )
+    }
+  }
+)
+profileRouter.post("/:id/CV", async (req, res, next) => {
   try {
     // if (!isValidObjectId(req.params.id))
     //   next(createError(400, `ID ${req.params.id} is invalid`))
@@ -129,6 +97,41 @@ profileRouter
       }
     } catch (error) {
       console.log(error)
+      next(
+        createError(500, "Oops something went wrong, please try again later")
+      )
+    }
+  })
+profileRouter
+  .route("/:id/experience/:expId")
+  .delete(async (req, res, next) => {
+    try {
+      if (experience.findOne({ where: { profileId: req.params.id } })) {
+        const data = await experience.destroy({
+          where: { id: req.params.expId },
+        })
+        res.send("deleted successfully")
+      } else {
+        next(createError(404, "id isnot found"))
+      }
+    } catch (error) {
+      next(
+        createError(500, "Oops something went wrong, please try again later")
+      )
+    }
+  })
+  .put(async (req, res, next) => {
+    try {
+      if (experience.findOne({ where: { profileId: req.params.id } })) {
+        const data = await experience.update(req.body, {
+          returning: true,
+          where: { id: req.params.expId },
+        })
+        res.send(data)
+      } else {
+        next(createError(404, "id isnot found"))
+      }
+    } catch (error) {
       next(
         createError(500, "Oops something went wrong, please try again later")
       )

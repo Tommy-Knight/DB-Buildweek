@@ -10,6 +10,7 @@ import { comments } from "../../db/db.js"
 const commentsRouter = express.Router()
 commentsRouter
   .route("/")
+
   .get(async (req, res, next) => {
     try {
       const data = await comments.findAll({
@@ -76,32 +77,32 @@ commentsRouter
         createError(500, "Oops something went wrong, please try again later")
       )
     }
-  });
+  })
 
-  const cloudinaryStorage = new CloudinaryStorage({
-		cloudinary,
-		params: { folder: "db-buildweek" },
-	})
+const cloudinaryStorage = new CloudinaryStorage({
+  cloudinary,
+  params: { folder: "db-buildweek" },
+})
 
-	const upload = multer({
-		storage: cloudinaryStorage,
-	}).single("image")
+const upload = multer({
+  storage: cloudinaryStorage,
+}).single("image")
 
-	commentsRouter.post("/:id/upload", upload, async (req, res, next) => {
-		try {
-			const data = await comments.update(
-				{ imageUrl: req.file.path },
-				{
-					where: { _id: req.params.id },
-					returning: true,
-				}
-			)
+// profileRouter.post("/:id/upload", upload, async (req, res, next) => {
+//   try {
+//     const data = await profile.update(
+//       { imageUrl: req.file.path },
+//       {
+//         where: { _id: req.params.id },
+//         returning: true,
+//       }
+//     )
 
-			if (data[0] === 1) res.send(data[1][0])
-			else res.status(404).send("ID not found")
-		} catch (error) {
-			next(error.message)
-		}
-	})
+//     if (data[0] === 1) res.send(data[1][0])
+//     else res.status(404).send("ID not found")
+//   } catch (error) {
+//     next(error.message)
+//   }
+// })
 
 export default commentsRouter
