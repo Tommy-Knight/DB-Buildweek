@@ -2,6 +2,11 @@
 import express from "express"
 import createError from "http-errors"
 import { comments, likes, posts, user, profile } from "../../db/db.js"
+import multer from "multer"
+import { v2 as cloudinary } from "cloudinary"
+import { CloudinaryStorage } from "multer-storage-cloudinary"
+
+const {CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } = process.env;
 
 const postsRouter = express.Router()
 postsRouter
@@ -87,4 +92,36 @@ postsRouter
 			)
 		}
 	})
+
+cloudinary.config({ 
+	cloud_name: CLOUDINARY_NAME,
+	api_key: CLOUDINARY_KEY,
+	api_secret: CLOUDINARY_SECRET,
+})
+const cloudinaryStorage = new CloudinaryStorage({
+	cloudinary,
+	params: { folder: "db-buildweek" },
+})
+
+const upload = multer({
+	storage: cloudinaryStorage,
+}).single("image")
+
+postsRouter.post("/:id/image", upload, async (req, res, next) => {
+	try {
+		const data = await posts.update(
+			{ image: req.file.path },
+			{
+				where: { id: req.params.id },
+				returning: true,
+			}
+		)
+		console.log(data[0])
+		if (data[0] === 1) res.send(data[1][0])
+		else res.status(404).send("ID not found")
+	} catch (error) {
+		next(error.message)
+	}
+})
+
 export default postsRouter
