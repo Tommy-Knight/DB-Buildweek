@@ -2,9 +2,13 @@
 import express from "express"
 import createError from "http-errors"
 import { profile, user, experience } from "../../db/db.js"
+import multer from "multer"
+import { v2 as cloudinary } from "cloudinary"
+import { CloudinaryStorage } from "multer-storage-cloudinary"
+import { uploadExperienceImage } from "../../utils/index.js"
 import { promisify } from "util"
 import fs from "fs-extra"
-import { join } from "path"
+// import { join } from "path"
 import { pipeline } from "stream"
 import PdfPrinter from "pdfmake"
 import generatePDFStream from "../helper/pdfout.js"
@@ -40,14 +44,26 @@ profileRouter
   })
 profileRouter.post(
   "/:id/experience/:expId/picture",
-  multer().single("authorAvatar"),
+  uploadExperienceImage,
   async (req, res, next) => {
     try {
       if (experience.findOne({ where: { profileId: req.params.id } })) {
-        const data = await profile.cre
+        const experiences = await experience.findOne({
+          where: { id: req.params.expId },
+        })
+        const data = await experience.update(
+          { ...experiences, image: req.file.path },
+          {
+            where: { id: req.params.expId },
+            returning: true,
+          }
+        )
+        res.send(data)
+      } else {
+        next(createError(404, "id is not found"))
       }
     } catch (error) {
-      console.log(e)
+      console.log(error)
       next(
         createError(500, "Oops something went wrong, please try again later")
       )

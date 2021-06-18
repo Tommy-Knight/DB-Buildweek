@@ -53,7 +53,7 @@ const experience = sequelize.define("experience", {
   },
   image: {
     type: DataTypes.TEXT,
-    allowNull: true,
+    // allowNull: false,
   },
 })
 const profile = sequelize.define("profile", {
